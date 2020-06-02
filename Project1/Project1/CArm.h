@@ -41,12 +41,13 @@ private:
 	float length;
 
 	CGlobal* pGlobal;
+	bool textureLoad = false;
 
 public:
 	CArm();
-	void playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, 
+	void playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1,
 		unsigned int VAO2, unsigned int VBO2, int type, float positionX, float positionY);
-	void thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, 
+	void thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1,
 		unsigned int VAO2, unsigned int VBO2, int type, float positionY);
 	void setMotion(int pose);
 	void setTMotion(int pose);

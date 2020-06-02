@@ -36,12 +36,13 @@ private:
 
 	CGlobal* pGlobal;
 
+	bool textureLoad = false;
 
 public:
 	CLeg();
-	void playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type, 
+	void playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type,
 		float positionX, float positionY, float angle, bool direction);
-	void thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type, 
+	void thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type,
 		float positionY, float angle, bool direction);
 	void setLeftAngle(bool thighDirection, float thighAngle);
 	void setRightAngle(bool thighDirection, float thighAngle);

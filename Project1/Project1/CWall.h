@@ -29,6 +29,7 @@ private:
 
 	CVertices vertice;
 	CGlobal* pGlobal;
+	bool textureLoad = false;
 
 public:
 	CWall();
@@ -50,7 +51,7 @@ public:
 	int getFront();
 	void draw(GLuint program, unsigned int VAO, unsigned int VBO);
 
-	void setVertices( int size);
+	void setVertices(int size);
 	float* getVertices();
 	void setWall(int pose);
 

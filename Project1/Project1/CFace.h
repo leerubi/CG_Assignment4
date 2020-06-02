@@ -17,17 +17,20 @@ private:
 	vector<float> verticesThief;
 	CGlobal* pGlobal;
 
+	float* verticeArr, * verticeArrT;
+	bool textureLoad = false;
 
 
 
-public: 
+public:
 	CFace();
-	void drawPlayer(GLuint program, float positionX, float positionY, 
+	void drawPlayer(GLuint program, float positionX, float positionY,
 		unsigned VAO, unsigned VBO);
-	void drawThief(GLuint program, float positionY, 
+	void drawThief(GLuint program, float positionY,
 		unsigned VAO, unsigned VBO);
 
 	void sendGlobalPtr(class CGlobal* pGlobal);
+	void renderFaces();
 
 };
 

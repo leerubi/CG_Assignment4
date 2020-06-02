@@ -27,15 +27,16 @@ private:
 	CLeg rightLeg;
 
 	CGlobal* pGlobal;
+	bool textureLoad = false;
 
 
 public:
 	CThigh();
-	void playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, 
+	void playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1,
 		unsigned int VAO2, unsigned int VBO2, int type, float positionX, float positionY);
-	void thiefDraw(GLuint program, unsigned int VAO1, unsigned int 
+	void thiefDraw(GLuint program, unsigned int VAO1, unsigned int
 		VBO1, unsigned int VAO2, unsigned int VBO2, int type, float positionY);
 	void sendGlobalPtr(class CGlobal* pGlobal);
-	   
+
 };
 

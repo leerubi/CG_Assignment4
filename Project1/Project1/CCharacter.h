@@ -36,6 +36,7 @@ private:
 	float playerPositionY;
 
 	CGlobal* pGlobal;
+	bool textureLoad = false;
 
 public:
 	CCharacter();

@@ -1,8 +1,11 @@
 #include "CFace.h"
+#include "stb_images.h"
+
 using namespace glm;
 CFace::CFace()
 {
     radius = 1.0f;
+    renderFaces();
 
 }
 
@@ -34,141 +37,44 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
     int shinenessLoc = glGetUniformLocation(program, "shineness");
     glUniform1f(shinenessLoc, pGlobal->gShineness);
 
-    for (int i = 0; i <= 80; i++) {
-        float angle = 4.5f * i;
-        float angle2 = 4.5f * (i+1);
-
-        //À­¸é
-        //x, y, z
-        vertices.push_back(radius * cos(radians(angle)));
-        vertices.push_back(1.0f);
-        vertices.push_back(radius * sin(radians(angle)));
-
-        //color
-        vertices.push_back(0.0f);
-        vertices.push_back(0.0f);
-        vertices.push_back(1.0f);
-
-        //x y z
-        vertices.push_back(0.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(0.0f);
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(.0f);
-        vertices.push_back(1.0f);
-
-        //x y z
-        vertices.push_back(radius * cos(radians(angle2)));
-        vertices.push_back(1.0f);
-        vertices.push_back(radius * sin(radians(angle2)));
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-
-        
-        //¾Æ·§¸é
-        vertices.push_back(radius * cos(radians(angle)));
-        vertices.push_back(0.0f);
-        vertices.push_back(radius * sin(radians(angle)));
-
-        //color
-        vertices.push_back(0.0f);
-        vertices.push_back(0.0f);
-        vertices.push_back(1.0f);
-
-        //x y z
-        vertices.push_back(0.0f);
-        vertices.push_back(0.0f);
-        vertices.push_back(0.0f);
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-
-        //x y z
-        vertices.push_back(radius * cos(radians(angle2)));
-        vertices.push_back(0.0f);
-        vertices.push_back(radius * sin(radians(angle2)));
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
 
 
-     
+    if (!textureLoad) {
 
-        //±âµÕ1
-        vertices.push_back(radius * cos(radians(angle2)));
-        vertices.push_back(0.0f);
-        vertices.push_back(radius * sin(radians(angle2)));
+        unsigned int texture1, texture2;
+        // texture 1
+        // ---------
+        glGenTextures(1, &texture1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        char fileName[15] = "brick_base.jpg";
 
-        //color
-        vertices.push_back(0.0f);
-        vertices.push_back(0.0f);
-        vertices.push_back(1.0f);
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+        unsigned char* data = stbi_load(fileName, &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
 
-        //x y z
-        vertices.push_back(radius * cos(radians(angle2)));
-        vertices.push_back(1.0f);
-        vertices.push_back(radius * sin(radians(angle2)));
 
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(.0f);
-        vertices.push_back(1.0f);
+        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // Á÷Á¢ ¼³Á¤
+        float* verticeArr = &vertices[0];
 
-        //x y z
-        vertices.push_back(radius * cos(radians(angle)));
-        vertices.push_back(1.0f);
-        vertices.push_back(radius * sin(radians(angle)));
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-
-        //±âµÕ2
-        //x y z
-        vertices.push_back(radius* cos(radians(angle)));
-        vertices.push_back(1.0f);
-        vertices.push_back(radius* sin(radians(angle)));
-
-        //color
-        vertices.push_back(0.0f);
-        vertices.push_back(0.0f);
-        vertices.push_back(1.0f);
-
-        //x y z
-        vertices.push_back(radius* cos(radians(angle)));
-        vertices.push_back(0.0f);
-        vertices.push_back(radius* sin(radians(angle)));
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-
-        //x y z
-        vertices.push_back(radius* cos(radians(angle2)));
-        vertices.push_back(0.0f);
-        vertices.push_back(radius* sin(radians(angle2)));
-
-        //color
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-        vertices.push_back(1.0f);
-
+        textureLoad = true;
     }
-
-    float* verticeArr = &vertices[0];
-
-
 
 
     glUseProgram(program); //draw 3 vertices as triangles 
@@ -179,14 +85,17 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 23328, verticeArr, GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, 30720, &vertices[0], GL_STATIC_DRAW);
+    cout << sizeof(vertices) << endl;
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    //texture attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(VAO);
 
@@ -197,7 +106,6 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
 
     glDrawArrays(GL_TRIANGLES, 0, 960);
-
 
 }
 
@@ -230,142 +138,53 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
     int shinenessLoc = glGetUniformLocation(program, "shineness");
     glUniform1f(shinenessLoc, pGlobal->gShineness);
 
-    for (int i = 0; i <= 80; i++) {
-        float angle = 4.5f * i;
-        float angle2 = 4.5f * (i + 1);
-
-        //À­¸é
-        //x, y, z
-        verticesThief.push_back(radius * cos(radians(angle)));
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(radius * sin(radians(angle)));
-
-        //color
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(0.0f);
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle2)));
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(radius * sin(radians(angle2)));
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
 
 
-        //¾Æ·§¸é
-        verticesThief.push_back(radius * cos(radians(angle)));
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(radius * sin(radians(angle)));
+    if (!textureLoad) {
 
-        //color
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(1.0f);
+        unsigned int texture1, texture2;
+        // texture 1
+        // ---------
+        glGenTextures(1, &texture1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        char fileName[15] = "brick_base.jpg";
 
-        //x y z
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(0.0f);
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle2)));
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(radius * sin(radians(angle2)));
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-
-
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+        unsigned char* data = stbi_load(fileName, &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
 
 
-        //±âµÕ1
-        verticesThief.push_back(radius * cos(radians(angle2)));
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(radius * sin(radians(angle2)));
+        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // Á÷Á¢ ¼³Á¤
+        float* verticeArr = &verticesThief[0];
 
-        //color
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle2)));
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(radius * sin(radians(angle2)));
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle)));
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(radius * sin(radians(angle)));
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-
-        //±âµÕ2
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle)));
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(radius * sin(radians(angle)));
-
-        //color
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle)));
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(radius * sin(radians(angle)));
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-
-        //x y z
-        verticesThief.push_back(radius * cos(radians(angle2)));
-        verticesThief.push_back(0.0f);
-        verticesThief.push_back(radius * sin(radians(angle2)));
-
-        //color
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
-        verticesThief.push_back(1.0f);
+        textureLoad = true;
 
     }
 
-    float* verticeArr = &verticesThief[0];
+
+
+
 
 
     glUseProgram(program); //draw 3 vertices as triangles 
+
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -373,15 +192,17 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 23328, verticeArr, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 30720, &verticesThief[0], GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
+    //texture attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(VAO);
 
@@ -400,3 +221,418 @@ void CFace::sendGlobalPtr(CGlobal* pGlobal)
     this->pGlobal = pGlobal;
 }
 
+void CFace::renderFaces()
+{
+    for (int i = 0; i <= 80; i++) {
+        float angle = 4.5f * i;
+        float angle2 = 4.5f * (i + 1);
+
+        //À­¸é
+        //x, y, z
+        vertices.push_back(radius * cos(radians(angle)));
+        vertices.push_back(1.0f);
+        vertices.push_back(radius * sin(radians(angle)));
+
+        //normal
+        //x, y, z
+        vertices.push_back(0.0f);
+        vertices.push_back(1.0f);
+        vertices.push_back(0.0f);
+
+
+        //color
+        vertices.push_back(0.0f);
+        vertices.push_back(0.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(0.0f);
+        vertices.push_back(1.0f);
+        vertices.push_back(0.0f);
+
+        //normal
+        //x, y, z
+        vertices.push_back(0.0f);
+        vertices.push_back(1.0f);
+        vertices.push_back(0.0f);
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(radius * cos(radians(angle2)));
+        vertices.push_back(1.0f);
+        vertices.push_back(radius * sin(radians(angle2)));
+
+        //normal
+//x, y, z
+        vertices.push_back(0.0f);
+        vertices.push_back(1.0f);
+        vertices.push_back(0.0f);
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+
+        //¾Æ·§¸é
+        vertices.push_back(radius * cos(radians(angle)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle)));
+
+        //normal
+//x, y, z
+        vertices.push_back(0.0f);
+        vertices.push_back(-1.0f);
+        vertices.push_back(0.0f);
+
+        //color
+        vertices.push_back(0.0f);
+        vertices.push_back(0.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(0.0f);
+        vertices.push_back(0.0f);
+        vertices.push_back(0.0f);
+
+        //normal
+//x, y, z
+        vertices.push_back(0.0f);
+        vertices.push_back(-1.0f);
+        vertices.push_back(0.0f);
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(radius * cos(radians(angle2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2)));
+
+        //normal
+//x, y, z
+        vertices.push_back(0.0f);
+        vertices.push_back(-1.0f);
+        vertices.push_back(0.0f);
+
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+
+        //±âµÕ1
+        vertices.push_back(radius * cos(radians(angle2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2)));
+
+        //normal
+        vertices.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+
+        //color
+        vertices.push_back(0.0f);
+        vertices.push_back(0.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(radius * cos(radians(angle2)));
+        vertices.push_back(1.0f);
+        vertices.push_back(radius * sin(radians(angle2)));
+
+        //normal
+        vertices.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(radius * cos(radians(angle)));
+        vertices.push_back(1.0f);
+        vertices.push_back(radius * sin(radians(angle)));
+
+
+        //normal
+        vertices.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+        //±âµÕ2
+        //x y z
+        vertices.push_back(radius * cos(radians(angle)));
+        vertices.push_back(1.0f);
+        vertices.push_back(radius * sin(radians(angle)));
+
+
+        //normal
+        vertices.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        vertices.push_back(0.0f);
+        vertices.push_back(0.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(radius * cos(radians(angle)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle)));
+
+
+        //normal
+        vertices.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+        //x y z
+        vertices.push_back(radius * cos(radians(angle2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2)));
+
+        //normal
+        vertices.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        vertices.push_back(0.0f);
+        vertices.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        vertices.push_back(1.0f);
+        vertices.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+    }
+
+
+
+    for (int i = 0; i <= 80; i++) {
+        float angle = 4.5f * i;
+        float angle2 = 4.5f * (i + 1);
+
+        //À­¸é
+        //x, y, z
+        verticesThief.push_back(radius * cos(radians(angle)));
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(radius * sin(radians(angle)));
+
+        //normal
+        //x, y, z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(0.0f);
+
+
+        //color
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(0.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(0.0f);
+
+        //normal
+        //x, y, z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(0.0f);
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle2)));
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(radius * sin(radians(angle2)));
+
+        //normal
+//x, y, z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(0.0f);
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(1.0f);
+        //verticesThief.push_back(1.0f);
+
+
+        //¾Æ·§¸é
+        verticesThief.push_back(radius * cos(radians(angle)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle)));
+
+        //normal
+//x, y, z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(-1.0f);
+        verticesThief.push_back(0.0f);
+
+        //color
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(0.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(0.0f);
+
+        //normal
+//x, y, z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(-1.0f);
+        verticesThief.push_back(0.0f);
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(1.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2)));
+
+        //normal
+//x, y, z
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(-1.0f);
+        verticesThief.push_back(0.0f);
+
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(1.0f);
+        //verticesThief.push_back(1.0f);
+
+
+
+
+        //±âµÕ1
+        verticesThief.push_back(radius * cos(radians(angle2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2)));
+
+        //normal
+        verticesThief.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+
+        //color
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(0.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle2)));
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(radius * sin(radians(angle2)));
+
+        //normal
+        verticesThief.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle)));
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(radius * sin(radians(angle)));
+
+
+        //normal
+        verticesThief.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(1.0f);
+        //verticesThief.push_back(1.0f);
+
+        //±âµÕ2
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle)));
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(radius * sin(radians(angle)));
+
+
+        //normal
+        verticesThief.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(0.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle)));
+
+
+        //normal
+        verticesThief.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(1.0f);
+        //verticesThief.push_back(1.0f);
+
+        //x y z
+        verticesThief.push_back(radius * cos(radians(angle2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2)));
+
+        //normal
+        verticesThief.push_back(radius * cos(radians(angle2 / 2 + angle / 2)));
+        verticesThief.push_back(0.0f);
+        verticesThief.push_back(radius * sin(radians(angle2 / 2 + angle / 2)));
+
+        //color
+        verticesThief.push_back(1.0f);
+        verticesThief.push_back(1.0f);
+        //vertices.push_back(1.0f);
+
+    }
+
+    verticeArr = &vertices[0];
+    verticeArrT = &verticesThief[0];
+}

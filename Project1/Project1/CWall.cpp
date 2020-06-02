@@ -1,13 +1,15 @@
 #include "CWall.h"
 using namespace glm;
+#include "stb_images.h"
+
 CWall::CWall()
 {
-	positionX = 10;
-	positionY = 1;
-	color = DEFAULT;
-	width = 0.5;
-	height = 2;
-	front = 0;
+    positionX = 10;
+    positionY = 1;
+    color = DEFAULT;
+    width = 0.5;
+    height = 2;
+    front = 0;
     vertices = nullptr;
     verticesSize = 0;
 
@@ -19,57 +21,57 @@ CWall::~CWall()
 
 void CWall::setWallPositionX(float positionX)
 {
-	this->positionX = positionX;
+    this->positionX = positionX;
 }
 
 float CWall::getWallPositionX()
 {
-	return positionX;
+    return positionX;
 }
 
 void CWall::setWallPositionY(float positionY)
 {
-	this->positionY = positionY;
+    this->positionY = positionY;
 }
 
 float CWall::getWallPositionY()
 {
-	return positionY;
+    return positionY;
 }
 
 void CWall::setWallColor(int color)
 {
-	this->color = color;
+    this->color = color;
 }
 
 int CWall::getWallColor()
 {
-	return color;
+    return color;
 }
 
 float CWall::getWallWidth()
 {
-	return width;
+    return width;
 }
 
 float CWall::getWallHeight()
 {
-	return height;
+    return height;
 }
 
 void CWall::setFront(int front)
 {
-	this->front = front;
+    this->front = front;
 }
 
 int CWall::getFront()
 {
-	return front;
+    return front;
 }
 
 void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
 {
- 
+
     glUseProgram(program); //draw 3 vertices as triangles 
 
     glGenVertexArrays(1, &VAO);
@@ -81,11 +83,14 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
     glBufferData(GL_ARRAY_BUFFER, verticesSize, getVertices(), GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    //texture attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
 
     // Get global view matrix and projection matrix
@@ -111,6 +116,51 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
     glUniform1f(shinenessLoc, pGlobal->gShineness);
 
     glBindVertexArray(VAO);
+
+
+
+
+    if (!textureLoad) {
+
+        unsigned int texture1, texture2;
+        // texture 1
+        // ---------
+        glGenTextures(1, &texture1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        char fileName[15] = "brick_base.jpg";
+
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+        unsigned char* data = stbi_load(fileName, &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
+
+
+        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 직접 설정
+        textureLoad = true;
+    }
+
+
+
+
+
+
+
 
 
     vec3 objColor;
@@ -157,7 +207,7 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
     int colorLoc = glGetUniformLocation(program, "color");
     glUniform3f(colorLoc, objColor.x, objColor.y, objColor.z);
 
-    glDrawArrays(GL_TRIANGLES, 0, verticesSize/24);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
 }
 
@@ -175,7 +225,7 @@ void CWall::setWall(int pose)
     if (vertices != nullptr)
         delete vertices;
 
-    verticesSize = 864;
+    verticesSize = 1152;
     this->vertices = vertice.getNormalVertices();
 
     //switch (pose) {

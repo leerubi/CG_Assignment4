@@ -36,10 +36,11 @@ private:
 	float rightRotateAngleT;
 
 	CGlobal* pGlobal;
-	   
+	bool textureLoad = false;
+
 public:
 	CForeArm();
-	void playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, 
+	void playerDraw(GLuint program, unsigned int VAO, unsigned int VBO,
 		int type, float angle, float positionX, float positionY);
 	void thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO,
 		int type, float angle, float positionY);
