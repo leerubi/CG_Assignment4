@@ -102,18 +102,18 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
 
     // Get global light position and light intensity
     int lightPositionLoc = glGetUniformLocation(program, "lightPosition");
-    glUniform4f(lightPositionLoc, pGlobal->gLightPosition.x, pGlobal->gLightPosition.y, pGlobal->gLightPosition.z, 0.0f);
+    glUniform4f(lightPositionLoc, pGlobal->dirLightPosition.x, pGlobal->dirLightPosition.y, pGlobal->dirLightPosition.z, 0.0f);
 
     // Get global diffusion product
     int diffuseProductLoc = glGetUniformLocation(program, "diffuseProduct");
-    glUniform4f(diffuseProductLoc, pGlobal->gDiffuseProduct.x, pGlobal->gDiffuseProduct.y, pGlobal->gDiffuseProduct.z, pGlobal->gDiffuseProduct.w);
+    glUniform4f(diffuseProductLoc, pGlobal->diffuseProduct.x, pGlobal->diffuseProduct.y, pGlobal->diffuseProduct.z, pGlobal->diffuseProduct.w);
 
     // Get global specular product and shineness
     int specularProductLoc = glGetUniformLocation(program, "specularProduct");
-    glUniform4f(specularProductLoc, pGlobal->gSpecularProduct.x, pGlobal->gSpecularProduct.y, pGlobal->gSpecularProduct.z, pGlobal->gSpecularProduct.w);
+    glUniform4f(specularProductLoc, pGlobal->specularProduct.x, pGlobal->specularProduct.y, pGlobal->specularProduct.z, pGlobal->specularProduct.w);
 
     int shinenessLoc = glGetUniformLocation(program, "shineness");
-    glUniform1f(shinenessLoc, pGlobal->gShineness);
+    glUniform1f(shinenessLoc, pGlobal->shineness);
 
     glBindVertexArray(VAO);
 
