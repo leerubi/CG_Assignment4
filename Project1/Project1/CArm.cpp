@@ -53,6 +53,8 @@ CArm::CArm()
 
 void CArm::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, unsigned int VAO2, unsigned int VBO2, int type, float positionX, float positionY)
 {
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -90,6 +92,10 @@ void CArm::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, unsi
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
     float pX = positionX;
 
@@ -236,6 +242,8 @@ void CArm::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, unsi
 void CArm::thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, unsigned int VAO2,
     unsigned int VBO2, int type, float positionY)
 {
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -273,6 +281,10 @@ void CArm::thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, unsig
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
     float pY = positionY;
 

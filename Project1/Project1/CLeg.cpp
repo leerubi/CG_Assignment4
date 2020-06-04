@@ -67,6 +67,8 @@ void CLeg::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, int ty
     float positionX, float positionY, float angle, bool direction)
 {
 
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -104,6 +106,11 @@ void CLeg::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, int ty
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
     float pX = positionX;
     float pY = positionY;
@@ -265,6 +272,8 @@ void CLeg::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, int ty
 void CLeg::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type,
     float positionY, float angle, bool direction)
 {
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -302,6 +311,10 @@ void CLeg::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int typ
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
 
     float pY = positionY;

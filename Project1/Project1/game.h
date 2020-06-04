@@ -96,6 +96,7 @@ int time1 = 0;
 
 
 int viewPoint = VP_GLOBAL;
+int shadingType = GOURAUD;
 bool dayOrNight = true;
 
 mat4 view = mat4(1.0f);

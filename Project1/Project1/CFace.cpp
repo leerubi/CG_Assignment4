@@ -11,6 +11,8 @@ CFace::CFace()
 
 void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigned VAO, unsigned VBO)
 {
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -48,6 +50,11 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
 
 
@@ -98,7 +105,6 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, 30720, &vertices[0], GL_STATIC_DRAW);
-    cout << sizeof(vertices) << endl;
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -123,6 +129,8 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
 
 void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VBO)
 {
+
+
 
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
@@ -161,6 +169,11 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
 
 

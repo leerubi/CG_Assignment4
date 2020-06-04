@@ -312,7 +312,7 @@ void doAnimation(int value) {
 		pGlobal->pointLightPositions[i].z = 0.0f;
 
 		// Point light intensity
-		pGlobal->pointDiffuseProducts[i] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		pGlobal->pointDiffuseProducts[i] = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 		pGlobal->pointSpecularProducts[i] = vec4(0.3f, 0.3f, 0.3f, 1.0f);
 
 
@@ -425,12 +425,21 @@ void doKeyboard(unsigned char key, int x, int y) {
 
 	switch (key) {
 	case 'b': {
-		if (viewPoint == VP_GLOBAL) {
-			viewPoint = VP_PLAYER;
+		if (viewPoint == VP_GLOBAL) { viewPoint = VP_PLAYER; }
+		else {	viewPoint = VP_GLOBAL;	}
+		return;
+	}
+	case 's': {
+		if (pGlobal->shadingType == GOURAUD)
+		{
+			pGlobal->shadingType = PHONG;
+			cout << "phong" << endl;
 		}
-		else {
-			viewPoint = VP_GLOBAL;
-		}
+		else
+		{
+			pGlobal->shadingType = GOURAUD;
+			cout << "gouraud" << endl;
+				}
 		return;
 	}
 	case 'c':

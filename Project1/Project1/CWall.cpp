@@ -127,6 +127,12 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
 
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
+
     glBindVertexArray(VAO);
 
 

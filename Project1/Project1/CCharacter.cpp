@@ -122,6 +122,8 @@ void CCharacter::playerDraw(GLuint program, unsigned int VAO[], unsigned int VBO
 
 
 
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -159,6 +161,12 @@ void CCharacter::playerDraw(GLuint program, unsigned int VAO[], unsigned int VBO
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
+
 
     // Set the position
     mat4 model = mat4(1.0f);
@@ -251,6 +259,8 @@ void CCharacter::thiefDraw(GLuint program, unsigned int VAO[], unsigned int VBO[
 
 
 
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -288,6 +298,11 @@ void CCharacter::thiefDraw(GLuint program, unsigned int VAO[], unsigned int VBO[
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
     mat4 model = mat4(1.0f);
     model = translate(model, vec3(1.25, theifPositionY, 0.0));

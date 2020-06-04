@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "global.h"
 using namespace glm;
 
 
@@ -16,6 +17,8 @@ public:
 	vec4 pointLightPositions[50];
 	vec4 pointDiffuseProducts[50];
 	vec4 pointSpecularProducts[50];
+
+	int shadingType = GOURAUD;
 
 	float shineness;
 	vec3 gPlayerColor;

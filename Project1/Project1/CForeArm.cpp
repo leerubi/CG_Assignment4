@@ -73,6 +73,8 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
     float angle, float positionX, float positionY)
 {
 
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -110,6 +112,11 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
     float pX = positionX;
     float pY = positionY;
@@ -267,6 +274,8 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
 void CForeArm::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type, float angle, float positionY)
 {
 
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -304,6 +313,11 @@ void CForeArm::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int
 
     int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
     glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
 
     float pY = positionY;
