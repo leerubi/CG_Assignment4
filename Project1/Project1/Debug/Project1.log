@@ -1,13 +1,4 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(445,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  game.cpp
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(30,33): warning C4244: '=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(31,29): warning C4244: '=': 'ULONGLONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(127,31): warning C4244: '=': 'ULONGLONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(160,49): warning C4305: '인수': 'double'에서 'GLclampf'(으)로 잘립니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(167,49): warning C4305: '인수': 'double'에서 'GLclampf'(으)로 잘립니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(182,35): warning C4244: '=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(185,65): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(231,21): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(250,20): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\game.cpp(426,32): warning C4244: '=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CWall.cpp
+D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\CWall.cpp(137,32): warning C4101: 'texture2' :참조되지 않은 지역 변수입니다.
   Project1.vcxproj -> D:\GraphicsWorkspace\CG_Assignment4\Project1\Project1\bin\x86\Project1.exe
