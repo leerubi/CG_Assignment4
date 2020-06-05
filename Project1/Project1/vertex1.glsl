@@ -42,6 +42,7 @@ uniform float quadratic = 0.032f;
 
 // Shading type
 uniform int shadingType; //100: Gouraud, 200: Phong
+uniform int diffuseType; //25 : on, 26 : off
 
 void main()
 {
@@ -67,9 +68,25 @@ void main()
         ambient = ambientProduct;
         result += ambient;
 
-        Kd = max(dot(L,N), 0.0);
-        diffuse = Kd * diffuseProduct;
+        //Kd = max(dot(L,N), 0.0);
+        //diffuse = Kd * diffuseProduct;
+        //result += diffuse;
+
+            if(diffuseType == 25){
+                Kd = max(dot(L,N), 0.0);
+                diffuse = Kd * diffuseProduct;
+            }else{
+                Kd = max(dot(L,N), 0.0);
+                diffuse = 0.0f * diffuseProduct;
+
+            //diffuse = vec4(0.0f);
+            //result
+            }
+
         result += diffuse;
+
+
+
 
         Ks = pow( max(dot(N, H), 0.0), shininess);
         specular = Ks * specularProduct;

@@ -37,6 +37,7 @@ private:
 
 	CGlobal* pGlobal;
 	bool textureLoad = false;
+	unsigned int texture;
 
 public:
 	CForeArm();

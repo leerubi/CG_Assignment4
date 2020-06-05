@@ -37,7 +37,7 @@ private:
 	CGlobal* pGlobal;
 
 	bool textureLoad = false;
-
+	unsigned int texture;
 public:
 	CLeg();
 	void playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, int type,

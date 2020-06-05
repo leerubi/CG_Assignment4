@@ -11,8 +11,6 @@ CFace::CFace()
 
 void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigned VAO, unsigned VBO)
 {
-
-
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -63,8 +61,9 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
         unsigned int texture1, texture2;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -72,7 +71,7 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[10] = "head.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -89,11 +88,18 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
         stbi_image_free(data);
 
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+
+        int location = glGetUniformLocation(program, "texture1");
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 1);
         float* verticeArr = &vertices[0];
 
         textureLoad = true;
     }
+
+
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
     glUseProgram(program); //draw 3 vertices as triangles 
@@ -175,6 +181,10 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
     glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
 
+    int diffuseTypeLoc = glGetUniformLocation(program, "diffuseType");
+    glUniform1i(diffuseTypeLoc, pGlobal->diffuseType);
+
+
 
 
     if (!textureLoad) {
@@ -182,8 +192,9 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
         unsigned int texture1, texture2;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -191,7 +202,7 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[10] = "head.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -208,13 +219,18 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
         stbi_image_free(data);
 
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
-        float* verticeArr = &verticesThief[0];
+
+        int location = glGetUniformLocation(program, "texture1");
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 1);
+        float* verticeArr = &vertices[0];
 
         textureLoad = true;
-
     }
 
+
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
 

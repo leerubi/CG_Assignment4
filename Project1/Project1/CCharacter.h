@@ -38,6 +38,8 @@ private:
 	CGlobal* pGlobal;
 	bool textureLoad = false;
 
+	unsigned int texture;
+
 public:
 	CCharacter();
 	void playerDraw(GLuint program, unsigned int VAO[], unsigned int VBO[]);

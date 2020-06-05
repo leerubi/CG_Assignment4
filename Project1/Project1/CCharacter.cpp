@@ -87,8 +87,8 @@ void CCharacter::playerDraw(GLuint program, unsigned int VAO[], unsigned int VBO
         unsigned int texture1, texture2;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -96,7 +96,7 @@ void CCharacter::playerDraw(GLuint program, unsigned int VAO[], unsigned int VBO
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[15] = "body.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -113,16 +113,17 @@ void CCharacter::playerDraw(GLuint program, unsigned int VAO[], unsigned int VBO
         stbi_image_free(data);
 
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+        int location = glGetUniformLocation(program, "texture1");
 
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 3);
         textureLoad = true;
     }
 
-
-
-
-
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
@@ -224,8 +225,8 @@ void CCharacter::thiefDraw(GLuint program, unsigned int VAO[], unsigned int VBO[
         unsigned int texture1, texture2;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -233,7 +234,7 @@ void CCharacter::thiefDraw(GLuint program, unsigned int VAO[], unsigned int VBO[
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[15] = "body.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -250,15 +251,17 @@ void CCharacter::thiefDraw(GLuint program, unsigned int VAO[], unsigned int VBO[
         stbi_image_free(data);
 
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+        int location = glGetUniformLocation(program, "texture1");
 
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 3);
         textureLoad = true;
     }
 
-
-
-
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
     // Get global view matrix and projection matrix

@@ -1,10 +1,46 @@
 #include "CWall.h"
 using namespace glm;
 #include "stb_images.h"
+#include <iostream>
+using namespace std;
+
+glm::vec3 redPositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),//중앙
+    glm::vec3(0.0f,  1.0f, 0.0f),//위
+    glm::vec3(0.0f, -1.0f, 0.0f),//아래
+    glm::vec3(0.0f, 0.0f, -1.0f),//왼쪽
+    glm::vec3(0.0f, 0.0f, 1.0f)//오른쪽
+};
+
+glm::vec3 yellowPositions[] = {
+    glm::vec3(0.0f,  1.0f, 0.0f),//위
+    glm::vec3(0.0f, -1.0f, 0.0f),//아래
+    glm::vec3(0.0f, 0.0f, -1.0f),//왼쪽
+    glm::vec3(0.0f, 0.0f, 1.0f)//오른쪽
+};
+
+glm::vec3 bluePositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),//중앙
+    glm::vec3(0.0f,  1.0f, 0.0f),//위
+    glm::vec3(0.0f, -1.0f, 0.0f),//아래
+    glm::vec3(0.0f, -1.0f, -1.0f),//왼쪽 아래
+    glm::vec3(0.0f,  1.0f, 1.0f) //오른쪽 위
+};
+
+glm::vec3 greenPositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),//중앙
+    glm::vec3(0.0f,  1.0f, 0.0f),//위
+    glm::vec3(0.0f, -1.0f, 0.0f),//아래
+    glm::vec3(0.0f,  1.0f, -1.0f),//왼쪽 위
+    glm::vec3(0.0f,  -1.0f, 1.0f) //오른쪽 아래
+};
+
+
+
 
 CWall::CWall()
 {
-    positionX = 10;
+    positionX = 11;
     positionY = 1;
     color = DEFAULT;
     width = 0.5;
@@ -133,18 +169,22 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
     glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
 
-    glBindVertexArray(VAO);
+
+    int diffuseTypeLoc = glGetUniformLocation(program, "diffuseType");
+    glUniform1i(diffuseTypeLoc, pGlobal->diffuseType);
 
 
+    int normalTypeLoc = glGetUniformLocation(program, "normalType");
+    glUniform1i(normalTypeLoc, pGlobal->normalType);
 
 
     if (!textureLoad) {
 
-        unsigned int texture1, texture2;
+        //unsigned int texture1;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -168,64 +208,137 @@ void CWall::draw(GLuint program, unsigned int VAO, unsigned int VBO)
         }
         stbi_image_free(data);
 
+        int location = glGetUniformLocation(program, "texture1");
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 직접 설정
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 직접 설정
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 0);
         textureLoad = true;
     }
 
 
+    /*if (pGlobal->normalType == NORMALON && !textureLoad2) {
+
+        //unsigned int texture1;
+        // texture 1
+        // ---------
+        glGenTextures(2, &texture2);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        char fileName[17] = "brick_normal.jpg";
+
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+        unsigned char* data = stbi_load(fileName, &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
+
+        int location = glGetUniformLocation(program, "texture2");
+
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 직접 설정
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        glUniform1i(location, 6);
+        textureLoad2 = true;
+    }*/
+
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+   
+
+    //if(pGlobal->normalType == NORMALON)
+    //    glBindTexture(GL_TEXTURE_2D, texture2);
+    //else
 
 
 
+    glBindVertexArray(VAO);
 
 
-
-
-    vec3 objColor;
     mat4 model = mat4(1.0f);
-    if (color == DEFAULT || color == JUMP) {
+
+    switch (color) {
+    case RED: {
+        for (int i = 0; i < 5; i++) {
+            model = mat4(1.0f);
+            model = translate(model, vec3(positionX + redPositions[i][0], redPositions[i][1] + 0.1, redPositions[i][2]));
+            //model = translate(model, vec3(positionX, -0.6f, 0.0f));
+            //model = rotate(model, radians(90.0f), vec3(0.0, 1.0, 0.0));
+            model = scale(model, vec3(0.36, 1.0, 1.36));
+            int modelLoc = glGetUniformLocation(program, "model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        break;
+
+    }
+    case YELLOW: {
+        for (int i = 0; i < 4; i++) {
+            model = mat4(1.0f);
+            model = translate(model, vec3(positionX + yellowPositions[i][0], yellowPositions[i][1] + 0.1, yellowPositions[i][2]));
+            //model = translate(model, vec3(positionX, -0.6f, 0.0f));
+            //model = rotate(model, radians(90.0f), vec3(0.0, 1.0, 0.0));
+            model = scale(model, vec3(0.36, 1.0, 1.36));
+            int modelLoc = glGetUniformLocation(program, "model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        break;
+
+    }
+    case BLUE: {
+        for (int i = 0; i < 5; i++) {
+            model = mat4(1.0f);
+            model = translate(model, vec3(positionX + bluePositions[i][0], bluePositions[i][1] + 0.1, bluePositions[i][2]));
+            //model = translate(model, vec3(positionX, -0.6f, 0.0f));
+            //model = rotate(model, radians(90.0f), vec3(0.0, 1.0, 0.0));
+            model = scale(model, vec3(0.36, 1.0, 1.36));
+            int modelLoc = glGetUniformLocation(program, "model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        break;
+    }
+    case GREEN: {
+        for (int i = 0; i < 5; i++) {
+            model = mat4(1.0f);
+            model = translate(model, vec3(positionX + greenPositions[i][0], greenPositions[i][1] + 0.1, greenPositions[i][2]));
+            //model = translate(model, vec3(positionX, -0.6f, 0.0f));
+            //model = rotate(model, radians(90.0f), vec3(0.0, 1.0, 0.0));
+            model = scale(model, vec3(0.36, 1.0, 1.36));
+            int modelLoc = glGetUniformLocation(program, "model");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        break;
+    }
+    default: {
         model = translate(model, vec3(positionX, -0.6f, 0.0f));
-        //model = scale(model, vec3(1.8, 8.0, 6.8));
         model = scale(model, vec3(0.36, 1.6, 1.36));
-        objColor = vec3(1.0f, 1.0f, 1.0f);
+        int modelLoc = glGetUniformLocation(program, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
 
     }
-    else if (color == RED)
-    {
-        model = translate(model, vec3(positionX, -0.6f, 0.0f));
-        //model = scale(model, vec3(1.8, 8.0, 6.8));
-        model = scale(model, vec3(0.36, 1.6, 0.68));
-        objColor = vec3(1.0f, 0.0f, 0.0f);
-    }
-    else if (color == GREEN)
-    {
-        model = translate(model, vec3(positionX, -0.6f, 0.0f));
-        //model = scale(model, vec3(1.8, 8.0, 6.8));
-        model = scale(model, vec3(0.36, 1.6, 0.68));
-        objColor = vec3(0.0f, 1.0f, 0.0f);
-    }
-    else if (color == BLUE)
-    {
-        model = translate(model, vec3(positionX, -0.6f, 0.0f));
-        //model = scale(model, vec3(1.8, 8.0, 6.8));
-        model = scale(model, vec3(0.36, 1.6, 0.68));
-        objColor = vec3(0.0f, 0.0f, 1.0f);
-    }
-    else if (color == YELLOW)
-    {
-        model = translate(model, vec3(positionX, -0.6f, 0.0f));
-        //model = scale(model, vec3(1.8, 8.0, 6.8));
-        model = scale(model, vec3(0.36, 1.6, 0.68));
-        objColor = vec3(1.0f, 1.0f, 0.0f);
-    }
-
-    int modelLoc = glGetUniformLocation(program, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, value_ptr(model));
-
-    int colorLoc = glGetUniformLocation(program, "color");
-    glUniform3f(colorLoc, objColor.x, objColor.y, objColor.z);
-
-    glDrawArrays(GL_TRIANGLES, 0, 36);
 
 }
 

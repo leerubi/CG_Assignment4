@@ -29,6 +29,10 @@ void Init() {
 	currentVelocity = velocity;
 	startTickCount = GetTickCount64();
 	startTimer = GetTickCount64();
+	musicStart = GetTickCount64();
+
+
+
 	srand((unsigned int)time(NULL));
 	thief.setThiefPose(rand() % 5);
 
@@ -46,7 +50,7 @@ void Init() {
 
 	// Start the game
 	walls.push_back(CWall());
-	sound.playsound(BGM);
+	//sound.playsound(BGM);
 
 
 }
@@ -96,6 +100,17 @@ void message(bool success) {
 }
 
 void renderScene(void) {
+	
+	if(!musicPlayed)
+		musicEnd = GetTickCount64();
+	if (musicEnd - musicStart > 3500) {
+		//sound.playsound(BGM);
+		musicEnd = 0;
+		musicStart = 0;
+		musicPlayed = true;
+	}
+
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// We can also generate multiple VAOs or buffers at the same time
@@ -424,12 +439,40 @@ void doKeyboard(unsigned char key, int x, int y) {
 	}
 
 	switch (key) {
+	case 'd': {
+		//adjust diffuse
+		pGlobal->normalType = NORMALOFF;
+		if (pGlobal->diffuseType == DIFFUSEON)
+		{
+			pGlobal->diffuseType = DIFFUSEOFF;
+		}
+		else {
+			pGlobal->diffuseType = DIFFUSEON;
+		}
+		cout << "diffuse" << endl;
+
+		return;
+	}
+	case 'n': {
+		if (pGlobal->shadingType == PHONG) {
+			if (pGlobal->normalType == NORMALON)
+			{
+				pGlobal->normalType = NORMALOFF;
+				cout << "normal" << endl;
+			}
+			else {
+				pGlobal->normalType = NORMALON;
+			}
+		}
+		return;
+	}
 	case 'b': {
 		if (viewPoint == VP_GLOBAL) { viewPoint = VP_PLAYER; }
 		else {	viewPoint = VP_GLOBAL;	}
 		return;
 	}
 	case 's': {
+		pGlobal->normalType = NORMALOFF;
 		if (pGlobal->shadingType == GOURAUD)
 		{
 			pGlobal->shadingType = PHONG;

@@ -19,6 +19,8 @@ class CGround
 {
 private:
 	CGlobal* pGlobal;
+	bool textureLoad = false;
+	unsigned int texture;
 
 public:
 	CGround();

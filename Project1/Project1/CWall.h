@@ -30,6 +30,11 @@ private:
 	CVertices vertice;
 	CGlobal* pGlobal;
 	bool textureLoad = false;
+	bool textureLoad2 = false;
+
+	unsigned int texture;
+	unsigned int texture2;
+
 
 public:
 	CWall();

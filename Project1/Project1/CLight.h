@@ -20,7 +20,11 @@ class CLight
 private:
 
 	CGlobal* pGlobal;
-
+	int start;
+	int current;
+	
+	bool textureLoad = false;
+	unsigned int texture;
 
 public:
 	CLight();
