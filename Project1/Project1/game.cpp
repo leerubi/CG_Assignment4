@@ -32,6 +32,14 @@ void Init() {
 	srand((unsigned int)time(NULL));
 	thief.setThiefPose(rand() % 5);
 
+	for (int i = 0; i < 50; i++)
+	{
+		pGlobal->pointDiffuseProducts[i] = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		pGlobal->pointSpecularProducts[i] = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	}
+
+
 	// Set player and thief own colors
 	pGlobal->gPlayerColor =	vec3(0.4f, 0.803922f, 0.666667f);
 	pGlobal->gThiefColor = vec3(1.0f, 0.5f, 0.3f);
@@ -39,6 +47,8 @@ void Init() {
 	// Start the game
 	walls.push_back(CWall());
 	sound.playsound(BGM);
+
+
 }
 
 void setObjectColor(int color) {
@@ -127,13 +137,13 @@ void renderScene(void) {
 	currentTimer = GetTickCount64();
 	if (rotateDirection)
 	{
-		lightX = -2.5f * cos((currentTimer - startTimer) / 2500.0f);
-		lightY = 2.5f * sin((currentTimer - startTimer) / 2500.0f);
+		lightX = -5.0f * cos((currentTimer - startTimer) / 2500.0f);
+		lightY = 5.0f * sin((currentTimer - startTimer) / 2500.0f);
 	}
 	else
 	{
-		lightX = 2.5f * cos((currentTimer - startTimer) / 2500.0f);
-		lightY = 2.5f * sin((currentTimer - startTimer) / 2500.0f);
+		lightX = 5.0f * cos((currentTimer - startTimer) / 2500.0f);
+		lightY = 5.0f * sin((currentTimer - startTimer) / 2500.0f);
 	}
 
 	// Set light rotation direction
@@ -151,26 +161,31 @@ void renderScene(void) {
 	}
 
 	// Set light position
-	pGlobal->gLightPosition = vec4(lightX, lightY, 0.0, 0.0);
+	pGlobal->dirLightPosition = vec4(lightX, lightY, 0.0, 0.0);
 
 	// Set diffuse light intensity
 	if (dayOrNight)
 	{
 		// Day light intensity
 		glClearColor(0.529412, 0.807843, 0.980392, 1.0); // Background color
-		pGlobal->gDiffuseProduct = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		pGlobal->diffuseProduct = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		//pGlobal->diffuseProduct = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
 
 	}
 	else
 	{
 		// Night light intensity
 		glClearColor(0.098039, 0.098039, 0.439216, 1.0); // Background color
-		pGlobal->gDiffuseProduct = vec4(0.15f, 0.15f, 0.15f, 1.0f);
+		pGlobal->diffuseProduct = vec4(0.15f, 0.15f, 0.15f, 1.0f);
+		//pGlobal->diffuseProduct = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
 	}
 
 	// Set specular light intensity and shineness
-	pGlobal->gSpecularProduct = vec4(0.3f, 0.3f, 0.3f, 1.0f);
-	pGlobal->gShineness = 0.4f;
+	pGlobal->specularProduct = vec4(0.3f, 0.3f, 0.3f, 1.0f);
+	//pGlobal->specularProduct = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	pGlobal->shineness = 0.4f;
 
 
 	// Draw objects
@@ -192,6 +207,7 @@ void renderScene(void) {
 	for (int i = front; i < total; i++) {
 		walls[i].sendGlobalPtr(pGlobal);
 		walls[i].draw(program, VAO[20], VBO[20]);
+
 	}
 	   
     glutSwapBuffers();
@@ -290,6 +306,16 @@ void doAnimation(int value) {
 	//Wall - move wall in "currentVelocity"
 	for (int i = 0; i < total; i++) {
 		walls[i].setWallPositionX(walls[i].getWallPositionX() - currentVelocity);
+		// Point light position
+		pGlobal->pointLightPositions[i].x = walls[i].getWallPositionX();
+		pGlobal->pointLightPositions[i].y = walls[i].getWallPositionY() + walls[i].getWallHeight();
+		pGlobal->pointLightPositions[i].z = 0.0f;
+
+		// Point light intensity
+		pGlobal->pointDiffuseProducts[i] = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+		pGlobal->pointSpecularProducts[i] = vec4(0.3f, 0.3f, 0.3f, 1.0f);
+
+
 		if (walls[i].getWallPositionX() + walls[i].getWallWidth() < -10) {
 			walls[i].setWallPositionX(-30);
 			front = i;
@@ -399,12 +425,21 @@ void doKeyboard(unsigned char key, int x, int y) {
 
 	switch (key) {
 	case 'b': {
-		if (viewPoint == VP_GLOBAL) {
-			viewPoint = VP_PLAYER;
+		if (viewPoint == VP_GLOBAL) { viewPoint = VP_PLAYER; }
+		else {	viewPoint = VP_GLOBAL;	}
+		return;
+	}
+	case 's': {
+		if (pGlobal->shadingType == GOURAUD)
+		{
+			pGlobal->shadingType = PHONG;
+			cout << "phong" << endl;
 		}
-		else {
-			viewPoint = VP_GLOBAL;
-		}
+		else
+		{
+			pGlobal->shadingType = GOURAUD;
+			cout << "gouraud" << endl;
+				}
 		return;
 	}
 	case 'c':

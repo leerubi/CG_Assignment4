@@ -33,5 +33,8 @@
 #define VP_PLAYER 21
 #define VP_GLOBAL 22
 
+#define GOURAUD 100
+#define PHONG 200
+
 #define PI 3.14159265358979323846
 

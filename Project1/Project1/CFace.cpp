@@ -11,6 +11,8 @@ CFace::CFace()
 
 void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigned VAO, unsigned VBO)
 {
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -18,24 +20,41 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
     int projectionLoc = glGetUniformLocation(program, "projection");
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, value_ptr(pGlobal->gProjection));
 
+    // Get global surface color
+    int colorLoc = glGetUniformLocation(program, "color");
+    glUniform3f(colorLoc, 1.0f, 1.0f, 1.0f);
+
+    // Get global shineness
+    int shinenessLoc = glGetUniformLocation(program, "shineness");
+    glUniform1f(shinenessLoc, pGlobal->shineness);
+
+    //// Directional light
     // Get global light position and light intensity
     int lightPositionLoc = glGetUniformLocation(program, "lightPosition");
-    glUniform4f(lightPositionLoc, pGlobal->gLightPosition.x, pGlobal->gLightPosition.y, pGlobal->gLightPosition.z, 0.0f);
-
-    // Get global player own color
-    int colorLoc = glGetUniformLocation(program, "color");
-    glUniform3f(colorLoc, pGlobal->gPlayerColor.x, pGlobal->gPlayerColor.y, pGlobal->gPlayerColor.z);
+    glUniform4f(lightPositionLoc, pGlobal->dirLightPosition.x, pGlobal->dirLightPosition.y, pGlobal->dirLightPosition.z, 0.0f);
 
     // Get global diffusion product
     int diffuseProductLoc = glGetUniformLocation(program, "diffuseProduct");
-    glUniform4f(diffuseProductLoc, pGlobal->gDiffuseProduct.x, pGlobal->gDiffuseProduct.y, pGlobal->gDiffuseProduct.z, pGlobal->gDiffuseProduct.w);
+    glUniform4f(diffuseProductLoc, pGlobal->diffuseProduct.x, pGlobal->diffuseProduct.y, pGlobal->diffuseProduct.z, pGlobal->diffuseProduct.w);
 
     // Get global specular product and shineness
     int specularProductLoc = glGetUniformLocation(program, "specularProduct");
-    glUniform4f(specularProductLoc, pGlobal->gSpecularProduct.x, pGlobal->gSpecularProduct.y, pGlobal->gSpecularProduct.z, pGlobal->gSpecularProduct.w);
+    glUniform4f(specularProductLoc, pGlobal->specularProduct.x, pGlobal->specularProduct.y, pGlobal->specularProduct.z, pGlobal->specularProduct.w);
 
-    int shinenessLoc = glGetUniformLocation(program, "shineness");
-    glUniform1f(shinenessLoc, pGlobal->gShineness);
+    //// Point lights
+    int pointLightPositionsLoc = glGetUniformLocation(program, "p_lightPositions");
+    glUniform4fv(pointLightPositionsLoc, 50, value_ptr(pGlobal->pointLightPositions[0]));
+
+    int p_diffuseProductLoc = glGetUniformLocation(program, "p_diffuseProduct");
+    glUniform4fv(p_diffuseProductLoc, 50, value_ptr(pGlobal->pointDiffuseProducts[0]));
+
+    int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
+    glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
 
 
@@ -86,7 +105,6 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, 30720, &vertices[0], GL_STATIC_DRAW);
-    cout << sizeof(vertices) << endl;
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -112,6 +130,8 @@ void CFace::drawPlayer(GLuint program, float positionX, float positionY, unsigne
 void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VBO)
 {
 
+
+
     // Get global view matrix and projection matrix
     int viewLoc = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(pGlobal->gView));
@@ -119,24 +139,41 @@ void CFace::drawThief(GLuint program, float positionY, unsigned VAO, unsigned VB
     int projectionLoc = glGetUniformLocation(program, "projection");
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, value_ptr(pGlobal->gProjection));
 
+    // Get global surface color
+    int colorLoc = glGetUniformLocation(program, "color");
+    glUniform3f(colorLoc, 1.0f, 1.0f, 1.0f);
+
+    // Get global shineness
+    int shinenessLoc = glGetUniformLocation(program, "shineness");
+    glUniform1f(shinenessLoc, pGlobal->shineness);
+
+    //// Directional light
     // Get global light position and light intensity
     int lightPositionLoc = glGetUniformLocation(program, "lightPosition");
-    glUniform4f(lightPositionLoc, pGlobal->gLightPosition.x, pGlobal->gLightPosition.y, pGlobal->gLightPosition.z, 0.0f);
-
-    // Get global thief own color
-    int colorLoc = glGetUniformLocation(program, "color");
-    glUniform3f(colorLoc, pGlobal->gThiefColor.x, pGlobal->gThiefColor.y, pGlobal->gThiefColor.z);
+    glUniform4f(lightPositionLoc, pGlobal->dirLightPosition.x, pGlobal->dirLightPosition.y, pGlobal->dirLightPosition.z, 0.0f);
 
     // Get global diffusion product
     int diffuseProductLoc = glGetUniformLocation(program, "diffuseProduct");
-    glUniform4f(diffuseProductLoc, pGlobal->gDiffuseProduct.x, pGlobal->gDiffuseProduct.y, pGlobal->gDiffuseProduct.z, pGlobal->gDiffuseProduct.w);
+    glUniform4f(diffuseProductLoc, pGlobal->diffuseProduct.x, pGlobal->diffuseProduct.y, pGlobal->diffuseProduct.z, pGlobal->diffuseProduct.w);
 
     // Get global specular product and shineness
     int specularProductLoc = glGetUniformLocation(program, "specularProduct");
-    glUniform4f(specularProductLoc, pGlobal->gSpecularProduct.x, pGlobal->gSpecularProduct.y, pGlobal->gSpecularProduct.z, pGlobal->gSpecularProduct.w);
+    glUniform4f(specularProductLoc, pGlobal->specularProduct.x, pGlobal->specularProduct.y, pGlobal->specularProduct.z, pGlobal->specularProduct.w);
 
-    int shinenessLoc = glGetUniformLocation(program, "shineness");
-    glUniform1f(shinenessLoc, pGlobal->gShineness);
+    //// Point lights
+    int pointLightPositionsLoc = glGetUniformLocation(program, "p_lightPositions");
+    glUniform4fv(pointLightPositionsLoc, 50, value_ptr(pGlobal->pointLightPositions[0]));
+
+    int p_diffuseProductLoc = glGetUniformLocation(program, "p_diffuseProduct");
+    glUniform4fv(p_diffuseProductLoc, 50, value_ptr(pGlobal->pointDiffuseProducts[0]));
+
+    int p_specularProductLoc = glGetUniformLocation(program, "p_specularProduct");
+    glUniform4fv(p_specularProductLoc, 50, value_ptr(pGlobal->pointSpecularProducts[0]));
+
+    // Get global shading type
+    int shadingTypeLoc = glGetUniformLocation(program, "shadingType");
+    glUniform1i(shadingTypeLoc, pGlobal->shadingType);
+
 
 
 
