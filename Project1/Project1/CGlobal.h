@@ -20,6 +20,10 @@ public:
 
 	int shadingType = GOURAUD;
 
+	int diffuseType = DIFFUSEON;
+
+	int normalType = NORMALOFF;
+
 	float shineness;
 	vec3 gPlayerColor;
 	vec3 gThiefColor;

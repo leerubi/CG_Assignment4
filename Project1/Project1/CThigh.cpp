@@ -105,6 +105,11 @@ void CThigh::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, un
     glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
 
+    int diffuseTypeLoc = glGetUniformLocation(program, "diffuseType");
+    glUniform1i(diffuseTypeLoc, pGlobal->diffuseType);
+
+
+
 
     float pX = positionX;
     float pY = positionY;
@@ -129,11 +134,11 @@ void CThigh::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, un
 
     if (!textureLoad) {
 
-        unsigned int texture1, texture2;
+        //unsigned int texture1;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -141,7 +146,7 @@ void CThigh::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, un
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[15] = "arm2.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -157,12 +162,18 @@ void CThigh::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, un
         }
         stbi_image_free(data);
 
+        int location = glGetUniformLocation(program, "texture1");
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 2);
         textureLoad = true;
     }
 
 
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
 
@@ -231,7 +242,7 @@ void CThigh::playerDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, un
 
 
         mat4 model = mat4(1.0f);
-        model = translate(model, vec3(pX, pY - 0.3, .3));
+        model = translate(model, vec3(pX, pY - 0.3, .2));
         model = rotate(model, radians(angle), vec3(0.0f, 0.0f, 1.0f));
         //model = scale(model, vec3(0.5, 1.5, 0.5));
         model = scale(model, vec3(0.1, 0.3, 0.1));
@@ -324,11 +335,11 @@ void CThigh::thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, uns
 
     if (!textureLoad) {
 
-        unsigned int texture1, texture2;
+        //unsigned int texture1;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -336,7 +347,7 @@ void CThigh::thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, uns
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[15] = "arm2.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -352,12 +363,18 @@ void CThigh::thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, uns
         }
         stbi_image_free(data);
 
+        int location = glGetUniformLocation(program, "texture1");
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 2);
         textureLoad = true;
     }
 
 
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
 
@@ -426,7 +443,7 @@ void CThigh::thiefDraw(GLuint program, unsigned int VAO1, unsigned int VBO1, uns
 
 
         mat4 model = mat4(1.0f);
-        model = translate(model, vec3(1.25, pY - 0.3, .3));
+        model = translate(model, vec3(1.25, pY - 0.3, .2));
         model = rotate(model, radians(angle), vec3(0.0f, 0.0f, 1.0f));
         //model = scale(model, vec3(0.5, 1.5, 0.5));
         model = scale(model, vec3(0.1, 0.3, 0.1));

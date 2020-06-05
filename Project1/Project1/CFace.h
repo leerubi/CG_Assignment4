@@ -20,7 +20,7 @@ private:
 	float* verticeArr, * verticeArrT;
 	bool textureLoad = false;
 
-
+	unsigned int texture;
 
 public:
 	CFace();

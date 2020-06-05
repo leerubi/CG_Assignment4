@@ -118,6 +118,10 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
     glUniform1i(shadingTypeLoc, pGlobal->shadingType);
 
 
+    int diffuseTypeLoc = glGetUniformLocation(program, "diffuseType");
+    glUniform1i(diffuseTypeLoc, pGlobal->diffuseType);
+
+
     float pX = positionX;
     float pY = positionY;
 
@@ -139,11 +143,11 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
 
     if (!textureLoad) {
 
-        unsigned int texture1, texture2;
+        //unsigned int texture1;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -151,7 +155,7 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[15] = "arm2.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -167,11 +171,18 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
         }
         stbi_image_free(data);
 
+        int location = glGetUniformLocation(program, "texture1");
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 2);
         textureLoad = true;
     }
 
+
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
 
@@ -199,7 +210,7 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
 
 
         mat4 model2 = mat4(1.0f);
-        model2 = translate(model2, vec3(pX, pY + 0.3, .3));
+        model2 = translate(model2, vec3(pX, pY + 0.3, .2));
         model2 = rotate(model2, radians(rightAngle), vec3(0.0f, 0.0f, 1.0f));
 
 
@@ -238,7 +249,7 @@ void CForeArm::playerDraw(GLuint program, unsigned int VAO, unsigned int VBO, in
 
 
         mat4 model2 = mat4(1.0f);
-        model2 = translate(model2, vec3(positionX, positionY + 0.3, 0.3));
+        model2 = translate(model2, vec3(positionX, positionY + 0.3, 0.2));
         model2 = rotate(model2, radians(rightAngle), vec3(0.0f, 0.0f, 1.0f));
 
         mat4 model = model2;
@@ -338,13 +349,15 @@ void CForeArm::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int
 
 
 
+
+
     if (!textureLoad) {
 
-        unsigned int texture1, texture2;
+        //unsigned int texture1;
         // texture 1
         // ---------
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
         // set the texture wrapping parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -352,7 +365,7 @@ void CForeArm::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // load image, create texture and generate mipmaps
-        char fileName[15] = "brick_base.jpg";
+        char fileName[15] = "arm2.jpg";
 
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -368,14 +381,18 @@ void CForeArm::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int
         }
         stbi_image_free(data);
 
+        int location = glGetUniformLocation(program, "texture1");
 
-        glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+        //glUniform1i(glGetUniformLocation(program, "texture1"), 0); // 流立 汲沥
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(location, 2);
         textureLoad = true;
     }
 
 
-
-
+    glBindTexture(GL_TEXTURE_2D, texture);
 
 
 
@@ -449,7 +466,7 @@ void CForeArm::thiefDraw(GLuint program, unsigned int VAO, unsigned int VBO, int
 
 
         mat4 model2 = mat4(1.0f);
-        model2 = translate(model2, vec3(1.25, pY + 0.3, 0.3));
+        model2 = translate(model2, vec3(1.25, pY + 0.3, 0.2));
         model2 = rotate(model2, radians(rightAngle), vec3(0.0f, 0.0f, 1.0f));
 
 

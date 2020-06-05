@@ -38,3 +38,9 @@
 
 #define PI 3.14159265358979323846
 
+
+#define DIFFUSEON 25
+#define DIFFUSEOFF 26
+
+#define NORMALON 27
+#define NORMALOFF 28

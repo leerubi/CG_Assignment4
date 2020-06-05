@@ -70,6 +70,10 @@ float lightY;
 bool rotateDirection = true;
 int cnt = 0;
 
+//music timer
+int musicStart;
+int musicEnd;
+bool musicPlayed = false;
 
 //Cheatcode variables
 enum CheatMode

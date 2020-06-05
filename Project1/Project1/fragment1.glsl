@@ -39,6 +39,9 @@ uniform float quadratic = 0.032f;
 // Shading type
 uniform int shadingType; //100: Gouraud, 200: Phong
 
+uniform int diffuseType; //25 : on, 26 : off
+uniform int normalType; // 27 : on, 28 : off
+
 void main()
 {
     // Gouraud shading
@@ -57,17 +60,33 @@ void main()
         float Ks = 0.4f;
         float distance, attenuation;
 
-        // Directional light
-        L = normalize(fL);
-        // L = normalize(vec3(-0.2f, -1.0f, -0.3f));
-        N = normalize(fN);
-        E = normalize(fE);
-        H = normalize(L+E);
+
+
+
+                // Directional light
+            L = normalize(fL);
+            // L = normalize(vec3(-0.2f, -1.0f, -0.3f));
+            N = normalize(fN);
+            E = normalize(fE);
+            H = normalize(L+E);
+
+
+
+
         ambient = ambientProduct;
         result += ambient;
 
-        Kd = max(dot(L,N), 0.0);
-        diffuse = Kd * diffuseProduct;
+        if(diffuseType == 25){
+            Kd = max(dot(L,N), 0.0);
+            diffuse = Kd * diffuseProduct;
+        }else{
+            Kd = max(dot(L,N), 0.0);
+            diffuse = 0.0f * diffuseProduct;
+
+            //diffuse = vec4(0.0f);
+            //result
+        }
+
         result += diffuse;
 
         Ks = pow(max(dot(N,H), 0.0), shininess);
@@ -83,15 +102,37 @@ void main()
             distance = length(p_lightPositions[i].xyz - fragPos);
             attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
 
-            N = normalize(fN);
-            E = normalize(fE);
-            L = normalize(p_lightPositions[i].xyz - fragPos);
-            H = normalize(L+E);
+
+                // Directional light
+                L = normalize(fL);
+                // L = normalize(vec3(-0.2f, -1.0f, -0.3f));
+                N = normalize(fN);
+                E = normalize(fE);
+                H = normalize(L+E);
+
+
             ambient = ambientProduct;
             result += (ambient*attenuation);
 
-            Kd = max(dot(L,N), 0.0);
-            diffuse = Kd * diffuseProduct;
+
+
+            if(diffuseType == 25){
+                Kd = max(dot(L,N), 0.0);
+                diffuse = Kd * diffuseProduct;
+            }else{
+                Kd = max(dot(L,N), 0.0);
+                diffuse = 0.0f * diffuseProduct;
+
+            //diffuse = vec4(0.0f);
+            //result
+            }
+
+
+
+
+
+            //Kd = max(dot(L,N), 0.0);
+            //diffuse = Kd * diffuseProduct;
             result += (diffuse*attenuation);
 
             Ks = pow(max(dot(N,H), 0.0), shininess);
@@ -100,8 +141,11 @@ void main()
             result += (specular*attenuation);
         }
 
-        FragColor = vec4(result.xyz*texture(texture1, TexCoord).rgb, 1.0f);
-
+        if(normalType == 27){
+            //texture2 = vec2(1.0f);
+            FragColor = vec4(result.xyz*texture(texture1, TexCoord).rgb*texture(texture2, TexCoord).rgb, 1.0f);
+        }else
+            FragColor = vec4(result.xyz*texture(texture1, TexCoord).rgb, 1.0f);
     }
 
 }
